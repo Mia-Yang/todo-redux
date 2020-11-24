@@ -3,7 +3,6 @@ const getData = (key) => {
         return JSON.parse(localStorage.getItem(key));
     }
     return [];
-
 }
 
 export const todoReducer = (state = getData("todoList"), action) => {
@@ -17,6 +16,7 @@ export const todoReducer = (state = getData("todoList"), action) => {
                     completed: false
                 }
             ]
+
         case 'TOGGLE_ITEM':
             return state.map(item =>
                 item.id === action.id ? {...item, completed: !item.completed } : item

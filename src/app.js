@@ -1,34 +1,20 @@
 import { addItem, removeItem, clearAll, editItem, toggleItem } from './redux/action'
 import { todoReducer } from './redux/reducer'
 
+const store = Redux.createStore(todoReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
 const saveData = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
-const getData = (key) => {
-    if (localStorage.getItem(key) !== null) {
-        allList = JSON.parse(localStorage.getItem(key));
-    } else {
-        allList = [];
-    }
-    return allList;
-}
-
-const removeData = (key) => {
-    localStorage.removeItem(key);
-}
-
-const store = Redux.createStore(todoReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-
-const inputText = document.querySelector(".inputbox");
-
 // add items
+const inputText = document.querySelector(".inputbox");
 const addTodo = (e) => {
     e.preventDefault();
-    const itemContent = inputText.value.trim();
+    const textContent = inputText.value.trim();
     inputText.value = '';
-    if (itemContent.length !== 0) {
-        store.dispatch(addItem(new Date().getTime(), itemContent));
+    if (textContent.length !== 0) {
+        store.dispatch(addItem(new Date().getTime(), textContent));
     }
 }
 const addBtn = document.querySelector('.add-btn');
@@ -51,35 +37,33 @@ clear.addEventListener('click', () => {
 });
 
 // edit items 
-const editContent = (id) => {
-    const textContainer = document.getElementById("text-" + id);
-    const oldText = textContainer.innerHTML;
-    textContainer.innerHTML = "";
-    let editInput = document.createElement("input");
-    editInput.setAttribute("type", "text");
-    editInput.setAttribute("id", "editInput-" + id);
-    textContainer.appendChild(editInput);
-    editInput.focus();
-    editInput.onblur = function() {
-        if (editInput.value.length) {
-            console.log(editInput.value, "--------edit");
-            store.dispatch(editItem(id, editInput.value.trim()));
+const editText = (id) => {
+    const textSpan = document.getElementById("text-" + id);
+    const originalText = textSpan.innerHTML;
+    textSpan.innerHTML = "";
+    const newInput = document.createElement("input");
+    newInput.setAttribute("type", "text");
+    newInput.setAttribute("id", "newInput-" + id);
+    textSpan.appendChild(newInput);
+    newInput.focus();
+    newInput.onblur = function() {
+        if (newInput.value.length) {
+            store.dispatch(editItem(id, newInput.value.trim()));
         } else {
-            textContainer.innerHTML = oldText;
+            textSpan.innerHTML = originalText;
         }
     }
 }
 
 // render items
 window.toggleTodo = toggleTodo;
-window.editContent = editContent;
+window.editText = editText;
 window.removeTodo = removeTodo;
 
 const todoList = document.querySelector(".todo-list");
 
 function render() {
     let listHtml = '';
-    console.log(store.getState(), "-----------store");
     saveData("todoList", store.getState());
 
     store.getState().forEach((item) => {
@@ -87,8 +71,8 @@ function render() {
         let checkedStyle = item.completed ? 'class="finished"' : '';
         listHtml +=
             `<li ${checkedStyle}>
-            <input type="checkbox" onclick="toggleTodo(this)" ${isChecked}> 
-            <span onclick="editContent(${item.id})" id="text-${item.id}"> ${item.text} </span>
+            <input type="checkbox" onclick="toggleTodo(${item.id})" ${isChecked}> 
+            <span onclick="editText(${item.id})" id="text-${item.id}"> ${item.text} </span>
             <button onclick="removeTodo(${item.id})" class="del">✖️</button>
             </li>`;
     })

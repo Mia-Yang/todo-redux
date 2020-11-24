@@ -1,4 +1,12 @@
-export const todoReducer = (state = [], action) => {
+const getData = (key) => {
+    if (localStorage.getItem(key) !== null) {
+        return JSON.parse(localStorage.getItem(key));
+    }
+    return [];
+
+}
+
+export const todoReducer = (state = getData("todoList"), action) => {
     switch (action.type) {
         case 'ADD_ITEM':
             return [

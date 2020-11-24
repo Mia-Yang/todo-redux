@@ -4,12 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="src/style.css">
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <title>Todos</title>
 </head>
 
 <body>
-    hello world
-
+    <main>
+        <header>
+            <h1>Todos</h1>
+        </header>
+        <form>
+            <input type="text" class="inputbox" placeholder="Plan your life!" />
+            <button class="add-btn" type="submit">➕</button>
+        </form>
+        <div class="operation">
+            <button class="clear">Clear All</button>
+        </div>
+        <ul class="todo-list">
+        </ul>
+    </main>
     <script src="src/app.js"></script>
 </body>
 

@@ -31,8 +31,8 @@ function removeTodo(id) {
 }
 
 // clear all
-const clear = document.querySelector(".clear");
-clear.addEventListener('click', () => {
+const clearButton = document.querySelector(".clear");
+clearButton.addEventListener('click', () => {
     store.dispatch(clearAll());
 });
 
